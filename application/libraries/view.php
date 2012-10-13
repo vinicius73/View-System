@@ -66,4 +66,32 @@ class View {
         }
     }
 
+    //Carrega a View
+    public function Load($setPAGE = NULL) {
+        //Define Pagina Principal
+        $PAGE = (is_string($setPAGE)) ? $setPAGE : $this->setView['PAGE'];
+
+        #Metodo Final
+        if (method_exists($this->CI, '_Finaliza')) {
+            $this->CI->_Finaliza();
+        }
+
+        #Se Pagina estiver Definida
+        if (!empty($PAGE)) {
+            $sVAR = $this->sVAR;
+            $sVAR['HEADER'] = $this->load->view($this->TEMPLATE . $this->setView['HEADER'], $this->sVAR, TRUE);
+            $sVAR['FOOTER'] = $this->load->view($this->TEMPLATE . $this->setView['FOOTER'], $this->sVAR, TRUE);
+            #Views Adicionais
+            if (isset($this->setView['Extra'])) {
+                foreach ($this->setView['Extra'] as $Nome => $Valor) {
+                    $sVAR[$Nome] = $this->load->view($this->TEMPLATE . $Valor, $this->sVAR, TRUE);
+                }
+            }
+            unset($this->sVAR, $this->setView);
+            $this->load->view($this->TEMPLATE . $PAGE, $sVAR);
+        } else {
+            show_404();
+        }
+    }
+
 }

@@ -7,10 +7,11 @@ class Welcome extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->view->SetTemplate('default');
     }
 
     public function index() {
-        $this->load->view('welcome_message');
+        $this->view->Load('page');
     }
 
 }

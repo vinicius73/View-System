@@ -79,16 +79,16 @@ class View {
         #Se Pagina estiver Definida
         if (!empty($PAGE)) {
             $sVAR = $this->sVAR;
-            $sVAR['HEADER'] = $this->load->view($this->TEMPLATE . $this->setView['HEADER'], $this->sVAR, TRUE);
-            $sVAR['FOOTER'] = $this->load->view($this->TEMPLATE . $this->setView['FOOTER'], $this->sVAR, TRUE);
+            $sVAR['HEADER'] = $this->CI->load->view($this->TEMPLATE . $this->setView['HEADER'], $this->sVAR, TRUE);
+            $sVAR['FOOTER'] = $this->CI->load->view($this->TEMPLATE . $this->setView['FOOTER'], $this->sVAR, TRUE);
             #Views Adicionais
             if (isset($this->setView['Extra'])) {
                 foreach ($this->setView['Extra'] as $Nome => $Valor) {
-                    $sVAR[$Nome] = $this->load->view($this->TEMPLATE . $Valor, $this->sVAR, TRUE);
+                    $sVAR[$Nome] = $this->CI->load->view($this->TEMPLATE . $Valor, $this->sVAR, TRUE);
                 }
             }
             unset($this->sVAR, $this->setView);
-            $this->load->view($this->TEMPLATE . $PAGE, $sVAR);
+            $this->CI->load->view($this->TEMPLATE . $PAGE, $sVAR);
         } else {
             show_404();
         }

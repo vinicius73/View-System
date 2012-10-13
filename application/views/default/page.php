@@ -1,4 +1,4 @@
-
+<?php echo $HEADER; ?>
 <!-- Primary Page Layout
 ================================================== -->
 
@@ -29,3 +29,4 @@
     </div>
 
 </div><!-- container -->
+<?php echo $FOOTER; ?>

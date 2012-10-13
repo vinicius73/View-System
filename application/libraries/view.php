@@ -30,12 +30,36 @@ class View {
         }
     }
 
+    #Adiciona View Extra
+
+    public function AddView($View = NULL, $Nome = NULL) {
+        $this->SetView($View, $Nome, TRUE);
+    }
+
+    #Define Header
+
+    public function SetHeader($View = NULL) {
+        $this->SetView($View, 'HEADER');
+    }
+
+    #Define Footer
+
+    public function SetFooter($View = NULL) {
+        $this->SetView($View, 'FOOTER');
+    }
+
+    #Define Pagina Principal
+
+    public function SetMain($View = NULL) {
+        $this->SetView($View, 'PAGE');
+    }
+
     #Define View
 
     private function SetView($View, $Nome, $Extra = FALSE) {
         if (is_string($View) && is_string($Nome)) {
             if ($Extra) {
-                $this->setView['Add'][$Nome] = $View;
+                $this->setView['Extra'][$Nome] = $View;
             } else {
                 $this->setView[$Nome] = $View;
             }

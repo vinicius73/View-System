@@ -21,4 +21,25 @@ class View {
         $this->sVAR = &$this->CI->sVAR;
     }
 
+    #Define Template
+
+    public function SetTemplate($Template = NULL) {
+        if (is_string($Template)) {
+            $this->TEMPLATE = $Template . '/';
+            $this->sVAR['TEMPLATE'] = $this->TEMPLATE;
+        }
+    }
+
+    #Define View
+
+    private function SetView($View, $Nome, $Extra = FALSE) {
+        if (is_string($View) && is_string($Nome)) {
+            if ($Extra) {
+                $this->setView['Add'][$Nome] = $View;
+            } else {
+                $this->setView[$Nome] = $View;
+            }
+        }
+    }
+
 }

@@ -4,11 +4,15 @@
  * @author luiz.vinicius73@gmail.com
  */
 class View {
-    #Variavel das views
 
+    //Variavel das views
     protected $sVAR = array();
+    #Metatags
+    protected $MetaTags = array();
+    #Titulo da Pagina
+    protected $PageTitle = array('title' => 'TITULO DA SUA PÁGINA AQUI $PageTitle', 'desc' => NULL);
     #Views a serem carregadas
-    protected $setView = array('HEADER' => 'comum/head', 'FOOTER' => 'comum/footer', 'PAGE' => NULL);
+    protected $theView = array('HEADER' => 'comum/head', 'FOOTER' => 'comum/footer', 'PAGE' => NULL);
     #Template do Site
     private $TEMPLATE = NULL;
     # @var CodeIgiter
@@ -19,6 +23,7 @@ class View {
         $this->CI = &get_instance();
         #sVAR
         $this->sVAR = &$this->CI->sVAR;
+        $this->sVAR['PageTitle'] = $this->PageTitle['title'];
     }
 
     #Define Template
@@ -59,17 +64,18 @@ class View {
     private function SetView($View, $Nome, $Extra = FALSE) {
         if (is_string($View) && is_string($Nome)) {
             if ($Extra) {
-                $this->setView['Extra'][$Nome] = $View;
+                $this->theView['Extra'][$Nome] = $View;
             } else {
-                $this->setView[$Nome] = $View;
+                $this->theView[$Nome] = $View;
             }
         }
     }
 
-    //Carrega a View
+    #Carrega a View
+
     public function Load($setPAGE = NULL) {
         //Define Pagina Principal
-        $PAGE = (is_string($setPAGE)) ? $setPAGE : $this->setView['PAGE'];
+        $PAGE = (is_string($setPAGE)) ? $setPAGE : $this->theView['PAGE'];
 
         #Metodo Final
         if (method_exists($this->CI, '_Finaliza')) {
@@ -79,18 +85,37 @@ class View {
         #Se Pagina estiver Definida
         if (!empty($PAGE)) {
             $sVAR = $this->sVAR;
-            $sVAR['HEADER'] = $this->CI->load->view($this->TEMPLATE . $this->setView['HEADER'], $this->sVAR, TRUE);
-            $sVAR['FOOTER'] = $this->CI->load->view($this->TEMPLATE . $this->setView['FOOTER'], $this->sVAR, TRUE);
+            $sVAR['HEADER'] = $this->CI->load->view($this->TEMPLATE . $this->theView['HEADER'], $this->sVAR, TRUE);
+            $sVAR['FOOTER'] = $this->CI->load->view($this->TEMPLATE . $this->theView['FOOTER'], $this->sVAR, TRUE);
             #Views Adicionais
-            if (isset($this->setView['Extra'])) {
-                foreach ($this->setView['Extra'] as $Nome => $Valor) {
+            if (isset($this->theView['Extra'])) {
+                foreach ($this->theView['Extra'] as $Nome => $Valor) {
                     $sVAR[$Nome] = $this->CI->load->view($this->TEMPLATE . $Valor, $this->sVAR, TRUE);
                 }
             }
-            unset($this->sVAR, $this->setView);
+            unset($this->sVAR, $this->theView);
             $this->CI->load->view($this->TEMPLATE . $PAGE, $sVAR);
         } else {
             show_404();
+        }
+    }
+
+    public function SetTitle($Titulo = NULL, $Descricao = NULL) {
+        #Titulo
+        if (is_string($Titulo)) {
+            $this->PageTitle['title'] = $Titulo;
+        }
+
+        #Descrição
+        if (is_string($Descricao)) {
+            $this->PageTitle['desc'] = $Descricao;
+        }
+
+        #Titulo da Página
+        if (is_string($this->PageTitle['desc'])) {
+            $this->sVAR['PageTitle'] = $this->PageTitle['title'] . ' &bull; ' . $this->PageTitle['desc'];
+        } else {
+            $this->sVAR['PageTitle'] = $this->PageTitle['title'];
         }
     }
 

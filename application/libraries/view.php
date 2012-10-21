@@ -92,6 +92,7 @@ class View {
         if (method_exists($this->CI, '_Finaliza')) {
             $this->CI->_Finaliza();
         }
+        $this->_preLoad();
 
         #Se Pagina estiver Definida
         if (!empty($PAGE)) {
@@ -109,6 +110,11 @@ class View {
         } else {
             show_404();
         }
+    }
+    
+    private function _preLoad(){
+        $this->sVAR['HeadTags'] = implode(PHP_EOL, $this->AddHead);
+        $this->sVAR['FooterTags'] = implode(PHP_EOL, $this->AddHead);
     }
 
     public function SetTitle($Titulo = NULL, $Descricao = NULL) {
@@ -175,11 +181,11 @@ class View {
         switch ($Tipo) {
             #Link CSS link_tag('favicon.ico', 'shortcut icon', 'image/ico');
             case 'css':
-                $Elemento = link_tag($this->Assets['CSS'], $Item);
+                $Elemento = link_tag($this->Assets['CSS']. $Item);
                 break;
             #Javascript
             case 'js':
-                $Elemento = script_tag($this->Assets['js'], $Item);
+                $Elemento = script_tag($this->Assets['js']. $Item);
                 break;
             #metatag
             case 'meta':

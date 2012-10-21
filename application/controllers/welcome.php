@@ -24,6 +24,11 @@ class Welcome extends CI_Controller {
     }
 
     public function index() {
+        #Assets
+        $this->view->AddCSS('base.css');
+        $this->view->AddCSS('skeleton.css');
+        $this->view->AddCSS('layout.css');
+        
         $this->view->SetTitle('$PageTitle', 'Simple View');
         $this->view->Load('page');
     }

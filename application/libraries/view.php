@@ -13,6 +13,17 @@ class View {
     protected $PageTitle = array('title' => 'TITULO DA SUA PÁGINA AQUI $PageTitle', 'desc' => NULL);
     #Views a serem carregadas
     protected $theView = array('HEADER' => 'comum/head', 'FOOTER' => 'comum/footer', 'PAGE' => NULL);
+    #Bases Assets
+    /*
+     * assets/
+     * assets/css/
+     * assets/js/
+     * assets/img/
+     */
+    public $Assets = array('BASE' => 'assets/', 'CSS' => 'assets/css/', 'JS' => 'assets/js/', 'IMG' => 'assets/img/');
+    #HeadAdd
+    #AddFooter
+    protected $AddHead = array(), $AddFooter = array();
     #Template do Site
     private $TEMPLATE = NULL;
     # @var CodeIgiter
@@ -116,6 +127,78 @@ class View {
             $this->sVAR['PageTitle'] = $this->PageTitle['title'] . ' &bull; ' . $this->PageTitle['desc'];
         } else {
             $this->sVAR['PageTitle'] = $this->PageTitle['title'];
+        }
+    }
+
+    /*
+     * metatags, css, favicon e javascript
+     * head e footer
+     */
+
+    #AddCSS
+
+    public function AddCSS($Item = NULL, $Local = 'head') {
+        #Verifica tipo de váriavel/$Item
+        if (is_string($Item)) {
+            $this->AddToAssets($Item, 'css', $Local);
+        } else if (is_array($Item)) {
+            foreach ($Item as $Valor) {
+                $this->AddToAssets($Valor, 'css', $Local);
+            }
+        }
+    }
+
+    #AddJS
+
+    public function AddJS($Item = NULL, $Local = 'footer') {
+        #Verifica tipo de váriavel/$Item
+        if (is_string($Item)) {
+            $this->AddToAssets($Item, 'js', $Local);
+        } else if (is_array($Item)) {
+            foreach ($Item as $Valor) {
+                $this->AddToAssets($Valor, 'js', $Local);
+            }
+        }
+    }
+
+    #AddMeta
+
+    public function AddMeta($Item = NULL, $Local = 'footer') {
+        #Verifica tipo de váriavel/$Item
+        if (is_array($Item)) {
+            $this->AddToAssets($Item, 'js', $Local);
+        }
+    }
+
+    private function AddToAssets($Item, $Tipo, $Local) {
+        #Verifica tipo de elemento
+        switch ($Tipo) {
+            #Link CSS link_tag('favicon.ico', 'shortcut icon', 'image/ico');
+            case 'css':
+                $Elemento = link_tag($this->Assets['CSS'], $Item);
+                break;
+            #Javascript
+            case 'js':
+                $Elemento = script_tag($this->Assets['js'], $Item);
+                break;
+            #metatag
+            case 'meta':
+                $Elemento = meta($Item);
+                break;
+            case 'favicon':
+                $Elemento = link_tag($Item, 'shortcut icon', 'image/ico');
+                break;
+            default:
+                $Elemento = NULL;
+                break;
+        }
+        #Local do elemento
+        if (!empty($Elemento)) {
+            if ($Local == 'head') {
+                $this->AddHead[] = $Elemento;
+            } else if ($Local == 'footer') {
+                $this->AddFooter[] = $Elemento;
+            }
         }
     }
 
